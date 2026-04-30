@@ -10,10 +10,13 @@ public sealed class EmailService(IConfiguration configuration, ILogger<EmailServ
     {
         var emailSettings = configuration.GetSection("Email");
 
+        var senderEmail = ResolveEnvVar(emailSettings["SenderEmail"] ?? string.Empty);
+        var password = ResolveEnvVar(emailSettings["Password"] ?? string.Empty);
+
         var message = new MimeMessage();
         message.From.Add(new MailboxAddress(
             emailSettings["SenderName"] ?? "My Smart Money",
-            emailSettings["SenderEmail"] ?? string.Empty));
+            senderEmail));
         message.To.Add(new MailboxAddress(toName, toEmail));
         message.Subject = subject;
 
@@ -30,10 +33,7 @@ public sealed class EmailService(IConfiguration configuration, ILogger<EmailServ
             SecureSocketOptions.StartTls,
             ct);
 
-        await client.AuthenticateAsync(
-            emailSettings["SenderEmail"] ?? string.Empty,
-            emailSettings["Password"] ?? string.Empty,
-            ct);
+        await client.AuthenticateAsync(senderEmail, password, ct);
 
         await client.SendAsync(message, ct);
         await client.DisconnectAsync(quit: true, ct);
@@ -86,5 +86,16 @@ public sealed class EmailService(IConfiguration configuration, ILogger<EmailServ
             """;
 
         await SendAsync(toEmail, toName, subject, html, ct);
+    }
+
+    // Expands %VAR_NAME% placeholders to their environment variable values,
+    // matching the same convention used for the database connection string.
+    private static string ResolveEnvVar(string value)
+    {
+        if (!value.StartsWith('%') || !value.EndsWith('%') || value.Length < 3)
+            return value;
+
+        var varName = value[1..^1];
+        return Environment.GetEnvironmentVariable(varName) ?? value;
     }
 }

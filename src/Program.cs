@@ -50,8 +50,9 @@ try
 
     // ── JWT Authentication ────────────────────────────────────
     var jwtSettings = builder.Configuration.GetSection("Jwt");
-    var secretKey = jwtSettings["SecretKey"]
+    var rawJwtSecretKey = jwtSettings["SecretKey"]
         ?? throw new InvalidOperationException("JWT SecretKey is not configured.");
+    var secretKey = ResolveEnvVar(rawJwtSecretKey);
 
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
@@ -200,6 +201,15 @@ catch (Exception ex)
 finally
 {
     Log.CloseAndFlush();
+}
+
+static string ResolveEnvVar(string value)
+{
+    if (!value.StartsWith('%') || !value.EndsWith('%') || value.Length < 3)
+        return value;
+
+    var varName = value[1..^1];
+    return Environment.GetEnvironmentVariable(varName) ?? value;
 }
 
 static string BuildConnectionStringFromEnv()

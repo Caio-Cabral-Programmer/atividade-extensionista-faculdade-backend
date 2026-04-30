@@ -11,8 +11,9 @@ public sealed class JwtTokenService(IConfiguration configuration)
     public (string Token, DateTime ExpiresAt) GenerateToken(User user)
     {
         var jwtSettings = configuration.GetSection("Jwt");
-        var secretKey = jwtSettings["SecretKey"]
+        var rawSecretKey = jwtSettings["SecretKey"]
             ?? throw new InvalidOperationException("JWT SecretKey is not configured.");
+        var secretKey = ResolveEnvVar(rawSecretKey);
 
         var expirationMinutes = int.Parse(jwtSettings["ExpirationInMinutes"] ?? "480");
         var expiresAt = DateTime.UtcNow.AddMinutes(expirationMinutes);
@@ -35,5 +36,14 @@ public sealed class JwtTokenService(IConfiguration configuration)
             signingCredentials: credentials);
 
         return (new JwtSecurityTokenHandler().WriteToken(token), expiresAt);
+    }
+
+    private static string ResolveEnvVar(string value)
+    {
+        if (!value.StartsWith('%') || !value.EndsWith('%') || value.Length < 3)
+            return value;
+
+        var varName = value[1..^1];
+        return Environment.GetEnvironmentVariable(varName) ?? value;
     }
 }
