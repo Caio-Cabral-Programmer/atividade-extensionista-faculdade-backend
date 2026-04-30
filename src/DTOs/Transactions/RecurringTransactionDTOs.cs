@@ -1,12 +1,12 @@
 namespace AtividadeExtensionistaFaculdadeBackend.DTOs.Transactions;
 
 public sealed record CreateRecurringTransactionRequest(
-    int Type,
+    string Type,
     decimal Amount,
     Guid AccountId,
     Guid CategoryId,
     string? Description,
-    int Frequency,
+    string Frequency,
     int? DayOfMonth,
     DateOnly StartDate,
     DateOnly? EndDate);
@@ -16,18 +16,18 @@ public sealed record UpdateRecurringTransactionRequest(
     Guid AccountId,
     Guid CategoryId,
     string? Description,
-    int Frequency,
+    string Frequency,
     int? DayOfMonth,
     DateOnly? EndDate,
     bool IsActive);
 
 public sealed record RecurringTransactionResponse(
     Guid RecurringTransactionId,
-    int Type,
+    string Type,
     string TypeName,
     decimal Amount,
     string? Description,
-    int Frequency,
+    string Frequency,
     string FrequencyName,
     int? DayOfMonth,
     DateOnly StartDate,

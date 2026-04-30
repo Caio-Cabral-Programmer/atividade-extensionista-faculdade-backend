@@ -9,7 +9,7 @@ public static class TransactionExtensions
     public static TransactionResponse ToResponse(this Transaction t) =>
         new(
             t.TransactionId,
-            (int)t.Type,
+            t.Type.ToString(),
             t.Type switch
             {
                 TransactionType.Income => "Receita",
@@ -20,7 +20,7 @@ public static class TransactionExtensions
             t.Amount,
             t.Date,
             t.Description,
-            (int)t.Status,
+            t.Status.ToString(),
             t.Status == TransactionStatus.Paid ? "Pago" : "Pendente",
             t.IsInstallment,
             t.InstallmentNumber,

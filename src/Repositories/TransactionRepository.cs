@@ -19,11 +19,11 @@ public sealed class TransactionRepository(AppDbContext db) : ITransactionReposit
             .Include(t => t.TransactionTags).ThenInclude(tt => tt.Tag)
             .Where(t => t.UserId == userId);
 
-        if (filter.Type.HasValue)
-            query = query.Where(t => (int)t.Type == filter.Type.Value);
+        if (filter.Type is not null && Enum.TryParse<TransactionType>(filter.Type, out var transactionType))
+            query = query.Where(t => t.Type == transactionType);
 
-        if (filter.Status.HasValue)
-            query = query.Where(t => (int)t.Status == filter.Status.Value);
+        if (filter.Status is not null && Enum.TryParse<TransactionStatus>(filter.Status, out var transactionStatus))
+            query = query.Where(t => t.Status == transactionStatus);
 
         if (filter.AccountId.HasValue)
             query = query.Where(t => t.AccountId == filter.AccountId.Value);

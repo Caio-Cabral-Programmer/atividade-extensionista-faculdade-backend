@@ -32,10 +32,10 @@ public sealed class RecurringTransactionService(
             UserId = userId,
             AccountId = request.AccountId,
             CategoryId = request.CategoryId,
-            Type = (TransactionType)request.Type,
+            Type = Enum.Parse<TransactionType>(request.Type),
             Amount = request.Amount,
             Description = request.Description,
-            Frequency = (RecurrenceFrequency)request.Frequency,
+            Frequency = Enum.Parse<RecurrenceFrequency>(request.Frequency),
             DayOfMonth = request.DayOfMonth,
             StartDate = request.StartDate,
             EndDate = request.EndDate,
@@ -58,7 +58,7 @@ public sealed class RecurringTransactionService(
         recurring.AccountId = request.AccountId;
         recurring.CategoryId = request.CategoryId;
         recurring.Description = request.Description;
-        recurring.Frequency = (RecurrenceFrequency)request.Frequency;
+        recurring.Frequency = Enum.Parse<RecurrenceFrequency>(request.Frequency);
         recurring.DayOfMonth = request.DayOfMonth;
         recurring.EndDate = request.EndDate;
         recurring.IsActive = request.IsActive;
@@ -80,7 +80,7 @@ public sealed class RecurringTransactionService(
     private static RecurringTransactionResponse ToResponse(RecurringTransaction r) =>
         new(
             r.RecurringTransactionId,
-            (int)r.Type,
+            r.Type.ToString(),
             r.Type switch
             {
                 TransactionType.Income => "Receita",
@@ -89,7 +89,7 @@ public sealed class RecurringTransactionService(
             },
             r.Amount,
             r.Description,
-            (int)r.Frequency,
+            r.Frequency.ToString(),
             r.Frequency switch
             {
                 RecurrenceFrequency.Daily => "Diária",

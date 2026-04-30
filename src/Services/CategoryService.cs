@@ -40,7 +40,7 @@ public sealed class CategoryService(ICategoryRepository repository) : ICategoryS
         {
             UserId = userId,
             Name = request.Name,
-            Type = (CategoryType)request.Type,
+            Type = Enum.Parse<CategoryType>(request.Type),
             Icon = request.Icon,
             Color = request.Color,
             ParentCategoryId = request.ParentCategoryId

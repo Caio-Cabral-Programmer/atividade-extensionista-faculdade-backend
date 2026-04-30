@@ -1,7 +1,7 @@
 namespace AtividadeExtensionistaFaculdadeBackend.DTOs.Transactions;
 
 public sealed record CreateTransactionRequest(
-    int Type,
+    string Type,
     decimal Amount,
     DateOnly Date,
     Guid AccountId,
@@ -9,7 +9,7 @@ public sealed record CreateTransactionRequest(
     Guid? CreditCardId,
     Guid CategoryId,
     string? Description,
-    int Status,
+    string Status,
     bool IsInstallment,
     int? TotalInstallments,
     bool IsRecurring,
@@ -23,14 +23,14 @@ public sealed record UpdateTransactionRequest(
     Guid? CreditCardId,
     Guid CategoryId,
     string? Description,
-    int Status,
+    string Status,
     List<Guid>? TagIds);
 
-public sealed record UpdateTransactionStatusRequest(int Status);
+public sealed record UpdateTransactionStatusRequest(string Status);
 
 public sealed record TransactionFilterRequest(
-    int? Type,
-    int? Status,
+    string? Type,
+    string? Status,
     Guid? AccountId,
     Guid? CategoryId,
     Guid? TagId,
@@ -41,12 +41,12 @@ public sealed record TransactionFilterRequest(
 
 public sealed record TransactionResponse(
     Guid TransactionId,
-    int Type,
+    string Type,
     string TypeName,
     decimal Amount,
     DateOnly Date,
     string? Description,
-    int Status,
+    string Status,
     string StatusName,
     bool IsInstallment,
     int? InstallmentNumber,

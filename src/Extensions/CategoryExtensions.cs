@@ -10,7 +10,7 @@ public static class CategoryExtensions
         new(
             category.CategoryId,
             category.Name,
-            (int)category.Type,
+            category.Type.ToString(),
             category.Type == CategoryType.Income ? "Receita" : "Despesa",
             category.Icon,
             category.Color,

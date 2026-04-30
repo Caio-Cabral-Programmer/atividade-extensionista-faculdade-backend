@@ -39,7 +39,7 @@ public sealed class AccountService(IAccountRepository repository) : IAccountServ
         {
             UserId = userId,
             Name = request.Name,
-            Type = (AccountType)request.Type,
+            Type = Enum.Parse<AccountType>(request.Type),
             InitialBalance = request.InitialBalance,
             Color = request.Color,
             Icon = request.Icon
@@ -56,7 +56,7 @@ public sealed class AccountService(IAccountRepository repository) : IAccountServ
             ?? throw new NotFoundException("Conta não encontrada.");
 
         account.Name = request.Name;
-        account.Type = (AccountType)request.Type;
+        account.Type = Enum.Parse<AccountType>(request.Type);
         account.InitialBalance = request.InitialBalance;
         account.Color = request.Color;
         account.Icon = request.Icon;

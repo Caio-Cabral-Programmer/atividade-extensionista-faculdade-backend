@@ -47,7 +47,7 @@ public sealed class TransactionService(
                 transactions.Add(BuildTransaction(request, userId, installmentAmount, i, request.TotalInstallments.Value, groupId));
             }
         }
-        else if (request.Type == (int)TransactionType.Transfer)
+        else if (request.Type == nameof(TransactionType.Transfer))
         {
             if (!request.DestinationAccountId.HasValue)
                 throw new BusinessRuleException("Conta de destino é obrigatória para transferências.");
@@ -92,7 +92,7 @@ public sealed class TransactionService(
         transaction.CreditCardId = request.CreditCardId;
         transaction.CategoryId = request.CategoryId;
         transaction.Description = request.Description;
-        transaction.Status = (TransactionStatus)request.Status;
+        transaction.Status = Enum.Parse<TransactionStatus>(request.Status);
 
         await repository.UpdateAsync(transaction, ct);
 
@@ -113,10 +113,10 @@ public sealed class TransactionService(
         var transaction = await repository.GetByIdAndUserAsync(transactionId, userId, ct)
             ?? throw new NotFoundException("Transação não encontrada.");
 
-        if (!Enum.IsDefined(typeof(TransactionStatus), request.Status))
+        if (!Enum.TryParse<TransactionStatus>(request.Status, out _))
             throw new BusinessRuleException("Status inválido.");
 
-        transaction.Status = (TransactionStatus)request.Status;
+        transaction.Status = Enum.Parse<TransactionStatus>(request.Status);
         await repository.UpdateAsync(transaction, ct);
 
         var updated = await repository.GetByIdAndUserAsync(transactionId, userId, ct);
@@ -150,11 +150,11 @@ public sealed class TransactionService(
             DestinationAccountId = request.DestinationAccountId,
             CreditCardId = request.CreditCardId,
             CategoryId = request.CategoryId,
-            Type = (TransactionType)request.Type,
+            Type = Enum.Parse<TransactionType>(request.Type),
             Amount = amount,
             Date = date,
             Description = request.Description,
-            Status = (TransactionStatus)request.Status,
+            Status = Enum.Parse<TransactionStatus>(request.Status),
             IsInstallment = installmentNumber.HasValue,
             InstallmentNumber = installmentNumber,
             TotalInstallments = totalInstallments,

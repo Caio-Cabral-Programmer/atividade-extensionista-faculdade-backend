@@ -10,7 +10,7 @@ public static class AccountExtensions
         new(
             account.AccountId,
             account.Name,
-            (int)account.Type,
+            account.Type.ToString(),
             account.Type switch
             {
                 AccountType.CheckingAccount => "Conta Corrente",

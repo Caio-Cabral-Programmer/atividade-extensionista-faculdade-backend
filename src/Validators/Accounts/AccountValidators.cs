@@ -1,4 +1,5 @@
 using AtividadeExtensionistaFaculdadeBackend.DTOs.Accounts;
+using AtividadeExtensionistaFaculdadeBackend.Entities.Enums;
 using FluentValidation;
 
 namespace AtividadeExtensionistaFaculdadeBackend.Validators.Accounts;
@@ -8,7 +9,7 @@ public sealed class CreateAccountRequestValidator : AbstractValidator<CreateAcco
     public CreateAccountRequestValidator()
     {
         RuleFor(x => x.Name).NotEmpty().MaximumLength(100).WithMessage("Nome deve ter no máximo 100 caracteres.");
-        RuleFor(x => x.Type).InclusiveBetween(1, 4).WithMessage("Tipo de conta inválido.");
+        RuleFor(x => x.Type).Must(t => Enum.TryParse<AccountType>(t, out _)).WithMessage("Tipo de conta inválido. Use: CheckingAccount, Savings, Cash ou Investment.");
         RuleFor(x => x.Color).NotEmpty().MaximumLength(10).WithMessage("Cor inválida.");
         RuleFor(x => x.Icon).NotEmpty().MaximumLength(50).WithMessage("Ícone inválido.");
     }
@@ -19,7 +20,7 @@ public sealed class UpdateAccountRequestValidator : AbstractValidator<UpdateAcco
     public UpdateAccountRequestValidator()
     {
         RuleFor(x => x.Name).NotEmpty().MaximumLength(100).WithMessage("Nome deve ter no máximo 100 caracteres.");
-        RuleFor(x => x.Type).InclusiveBetween(1, 4).WithMessage("Tipo de conta inválido.");
+        RuleFor(x => x.Type).Must(t => Enum.TryParse<AccountType>(t, out _)).WithMessage("Tipo de conta inválido. Use: CheckingAccount, Savings, Cash ou Investment.");
         RuleFor(x => x.Color).NotEmpty().MaximumLength(10).WithMessage("Cor inválida.");
         RuleFor(x => x.Icon).NotEmpty().MaximumLength(50).WithMessage("Ícone inválido.");
     }
