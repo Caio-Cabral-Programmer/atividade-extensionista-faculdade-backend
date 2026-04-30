@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: "my-smart-money-api"
+    scheme: http
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["host.docker.internal:7001"]
+        labels:
+          app: "my-smart-money"
+          environment: "development"

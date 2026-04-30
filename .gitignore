@@ -365,3 +365,4 @@ FodyWeavers.xsd
 # My additions:
 .github/
 .vscode/
+.claude/

@@ -1,0 +1,37 @@
+# Build artifacts
+**/bin/
+**/obj/
+**/out/
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+# Git
+.git/
+.gitignore
+
+# Documentation (not needed in container)
+.github/
+*.md
+LICENSE.txt
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Environment secrets
+.env
+.env.*
+appsettings.Development.json
+
+# Logs
+logs/
+*.log
+
+# Test results
+TestResults/
+coverage/
